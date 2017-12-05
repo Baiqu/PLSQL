@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PLSQL.DataAccess", "PLSQL.DataAccess\PLSQL.DataAccess.csproj", "{6994D284-0262-4307-B801-67E03AC1D416}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PLSQL.Entities", "PLSQL.Entities\PLSQL.Entities.csproj", "{3EB289C5-C35C-4697-9E60-19F607D90B9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PLSQL.Facade", "PLSQL.Facade\PLSQL.Facade.csproj", "{24EF8A95-D53B-431F-BDE4-E4BB0263073C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PLSQL", "PLSQL\PLSQL.csproj", "{7854405C-D4AE-46F5-9BD2-6A000A811BC6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		My Debug|Any CPU = My Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6994D284-0262-4307-B801-67E03AC1D416}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6994D284-0262-4307-B801-67E03AC1D416}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6994D284-0262-4307-B801-67E03AC1D416}.My Debug|Any CPU.ActiveCfg = My Debug|Any CPU
+		{6994D284-0262-4307-B801-67E03AC1D416}.My Debug|Any CPU.Build.0 = My Debug|Any CPU
+		{6994D284-0262-4307-B801-67E03AC1D416}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6994D284-0262-4307-B801-67E03AC1D416}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EB289C5-C35C-4697-9E60-19F607D90B9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EB289C5-C35C-4697-9E60-19F607D90B9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EB289C5-C35C-4697-9E60-19F607D90B9D}.My Debug|Any CPU.ActiveCfg = My Debug|Any CPU
+		{3EB289C5-C35C-4697-9E60-19F607D90B9D}.My Debug|Any CPU.Build.0 = My Debug|Any CPU
+		{3EB289C5-C35C-4697-9E60-19F607D90B9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EB289C5-C35C-4697-9E60-19F607D90B9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24EF8A95-D53B-431F-BDE4-E4BB0263073C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24EF8A95-D53B-431F-BDE4-E4BB0263073C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24EF8A95-D53B-431F-BDE4-E4BB0263073C}.My Debug|Any CPU.ActiveCfg = My Debug|Any CPU
+		{24EF8A95-D53B-431F-BDE4-E4BB0263073C}.My Debug|Any CPU.Build.0 = My Debug|Any CPU
+		{24EF8A95-D53B-431F-BDE4-E4BB0263073C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24EF8A95-D53B-431F-BDE4-E4BB0263073C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7854405C-D4AE-46F5-9BD2-6A000A811BC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7854405C-D4AE-46F5-9BD2-6A000A811BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7854405C-D4AE-46F5-9BD2-6A000A811BC6}.My Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7854405C-D4AE-46F5-9BD2-6A000A811BC6}.My Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7854405C-D4AE-46F5-9BD2-6A000A811BC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7854405C-D4AE-46F5-9BD2-6A000A811BC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://121.199.32.88:8080/tfs/winner
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = PLSQL.DataAccess\\PLSQL.DataAccess.csproj
+		SccProjectName1 = PLSQL.DataAccess
+		SccLocalPath1 = PLSQL.DataAccess
+		SccProjectUniqueName2 = PLSQL.Entities\\PLSQL.Entities.csproj
+		SccProjectName2 = PLSQL.Entities
+		SccLocalPath2 = PLSQL.Entities
+		SccProjectUniqueName3 = PLSQL.Facade\\PLSQL.Facade.csproj
+		SccProjectName3 = PLSQL.Facade
+		SccLocalPath3 = PLSQL.Facade
+		SccProjectUniqueName4 = PLSQL\\PLSQL.csproj
+		SccProjectName4 = PLSQL
+		SccLocalPath4 = PLSQL
+	EndGlobalSection
+EndGlobal

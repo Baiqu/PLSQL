@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewBag.Title = "绑定用户";
+}
+<link rel="stylesheet" href="/Resources/components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css" />
+<link rel="stylesheet" href="/Resources/components/bootstrap-daterangepicker/daterangepicker.css" />
+
+        
+<ul id="Binding_Manager">
+    <li>
+        <p>授权与过期时间：</p>
+        <div class="input-daterange input-group">
+            <input type="text" class="input-sm form-control" id="StartTime" name="start" />
+            <span class="input-group-addon">
+                <i class="fa fa-exchange"></i>
+            </span>
+            <input type="text" class="input-sm form-control" id="EndTime" name="end" />
+        </div>
+    </li>
+    <li class="binding_input">
+        <span>用户账号:</span><input type="text" class="usercode_text" id="UserCode" />
+        <input type="button" value="授权" class="btn btn-default" onclick="Binding();" />
+    </li>
+    <li>执行绑定的操作：<a href="/ExecuteResult/Index?ViewId= @ViewBag.ViewId" target="_blank">@ViewBag.ViewName</a></li>
+    <li>
+        <table class="table  table-bordered table-hover">
+            <thead>
+                <tr><th>已绑定的用户</th><th>授权时间</th><th>过期时间</th><th>操作</th></tr>
+            </thead>
+            <tbody data-bind="foreach:Data" id="_BinDing">
+                <tr class="list-repeat-info"><td data-bind="text:USER_NAME+'['+USER_CODE+']'"></td><td data-bind="text:AuthTime"></td><td data-bind="text:TimeOut"></td><td><a href="javascript:void(0)" onclick="ReleaseAuthority(this);" data-bind="attr:{Right:ID}">解除授权</a></td></tr>
+            </tbody>
+        </table>
+        <ul class="pagination User_view"></ul>
+    </li>
+</ul>
+<input type="hidden" value="@ViewBag.ViewId" id="_ViewId"/>
+@section scripts{
+<script src="http://apps.bdimg.com/libs/knockout.js/3.1.0/knockout.js"></script>
+<script src="/Resources/scripts/winner.amazeui.changePage.js"></script>
+<script src="/Resources/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        var _url_Index = "@Url.Content("/Binding/Index")";
+        var _url_authorization = "@Url.Content("/Binding/AddViewRight/")";
+        var _url_releaseauthorization = "@Url.Content("/Binding/DeleteViewRight/")";
+        //or change it into a date range picker
+        $('.input-daterange').datepicker({ autoclose: true });
+        $(function () {
+            initView();
+        });
+
+
+        @*function initView() {
+            ajax.post(_url_Index, { ViewId:@ViewBag.ViewId},
+                    function (result) {
+                        if (result.Success) {
+                            ko.applyBindings(result.Content, document.getElementById("_BinDing"));
+                            return;
+                        }
+                        alert(result.Message);
+                    });
+        }*@
+
+        function initView() {
+            $(".User_view").jqPaginator({
+                url: _url_Index,
+                eleid: "_BinDing",
+                tip: ".view-tip",
+                totalCounts: 1,
+                pageSize: 10,
+                visiblePages: 10,
+                currentPage: 1,
+                getData: function () {
+                    var date = {
+                        ViewId:@ViewBag.ViewId,
+                    };
+                    return date;
+                }
+            });
+        }
+
+        function Binding(){
+            var starttime = $("#StartTime").val().trim();
+            var endtion = $("#EndTime").val().trim();
+            var usercode = $("#UserCode").val().trim();
+            var isok =true;
+            var msg = "";
+            if(starttime.length==0){
+                isok = false;
+                msg="授权时间不能为空";
+            }else if(endtion.length==0){
+                isok = false;
+                msg="过期时间不能为空";
+            }else if(usercode.length==0){
+                isok = false;
+                msg="用户账号不能为空";
+            }
+            if(!isok){
+                alert(msg);
+            }else{
+                ajax.post(_url_authorization, { ViewId:@ViewBag.ViewId, StartTime:starttime,EndTime:endtion,UserCode:usercode },
+                function (result) {
+                    if(result.Success){
+                        alert("授权成功");
+                        $('.User_view').jqPaginator('reload');
+                    }else{
+                        alert(result.Message);
+                    }
+                });
+            }
+        }
+
+        function ReleaseAuthority(obj){
+            ajax.post(_url_releaseauthorization, { ID:$(obj).attr("Right")},
+                function (result) {
+                    if(result.Success){
+                        alert("已解除授权");
+                        $('.User_view').jqPaginator('reload');
+                    }else{
+                        alert(result.Message);
+                    }
+                });
+        }
+    </script>
+}

@@ -1,0 +1,39 @@
+﻿ul{padding:0px !important;margin:0px !important;}
+li{list-style-type:none;}
+#_top_title{width:100%; height:50px;background-color:#bcd5f0;margin-bottom:5px;}
+#_top_title p{text-align:center;line-height: 4rem;font-size: 18px;}
+#Home_Content_width{width:100%;}
+#Home_Content_width .Home-main{width:100%;height:100%;float:left;}
+#_Index_Search{border: 1px #ccc solid; height:55px;line-height:4rem;margin-bottom:5px;}
+#_Index_Search ul{padding-left:10px !important;}
+#_Index_Search ul li{float:left;margin-right:10px;}
+#_Index_Search ul li label{margin-right:10px;}
+.home-main-input{height:34px;padding:6px 12px;}
+.list-repeat-info td a{margin-right:5px;}
+.sql-type{height:34px;padding: 6px 12px;}
+
+.sql-conten{width:780px;height:360px;}
+#_User_SQL table{margin:0 auto;}
+#_User_SQL table tr{border-bottom: #ffffff 10px solid;}
+.sql_Sample_Verification{text-align:right;}
+.sql_Sample_Verification label{float:left;line-height:2.5rem;}
+.sql_Remarks{width:780px;height:50px;}
+.sql_submit_close {text-align:right;}
+.sql_submit_close input {margin-left:20px;}
+
+#Binding_Manager{width:450px;}
+#Binding_Manager li{margin-bottom:10px;}
+#Binding_Manager .binding_input{border:#ccc 1px solid;padding: 3px 10px;height: 50px;}
+#Binding_Manager .binding_input span{float: left;line-height: 3.5rem;}
+#Binding_Manager .binding_input .usercode_text{height:42px;float:left;}
+#Binding_Manager .binding_input input{margin-left:5px;}
+#Execute_Result li input{margin-right:20px;}
+#Execute_Result li{margin-bottom:10px;}
+#Execute_Result .execute_result_remark{padding: 5px 2px;border: #ccc 1px solid;}
+#Execute_Result .result_list{width:100%;}
+#Execute_Result .result_list tr{text-align:center;}
+#Execute_Result .result_list tr th{background-color:#438EB9;height:26px;color:white;text-align:center;border:#438EB9 1px solid;}
+#Execute_Result .result_list tr td{height:24px;border:#438EB9 1px solid;}
+.table-bordered tr th{text-align: center !important;word-wrap: break-word;}
+.table-bordered tr td{text-align: center !important;word-wrap: break-word;}
+.subval_{max-width:160px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}

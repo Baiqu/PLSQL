@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewBag.Title = "新增SQL语句";
+}
+<form action="javascript:void(0);" id="_User_SQL">
+    <table>
+        <tr>
+            <td>标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题：</td>
+            <td><input id="Title" type="text" data-bind="value:VIEW_NAME"/></td>
+        </tr>
+        <tr>
+            <td>数据类型：</td>
+            <td>
+                <select id="DataType" data-bind="value:CLASSIFY_ID,foreach:classifylist">
+                    <option data-bind="value:ClassifyId,text:ClassifyName"></option>
+                </select>
+            </td>
+        </tr>
+        <tr id="FormType">
+            <td>报表类型：</td>
+            <td><label><input type="checkbox" />基本线状图</label><label><input type="checkbox" />基本柱状图</label><label><input type="checkbox" />基本饼状图</label></td>
+        </tr>
+        <tr id="StateType">
+            <td>缓存状态：</td>
+            <td><label><input type="radio" checked="checked" name="cache" value="0"/>未开启</label><label><input type="radio" name="cache" value="1"/>已开启</label></td>
+        </tr>
+        <tr>
+            <td>SQL语句：</td>
+            <td>
+                <textarea class="sql-conten" id="SQLContent" data-bind="text:COMMAND_TEXT"></textarea>
+                <p class="sql_Sample_Verification"><label>示例：select * from T_Name t where #t.nodeid=:nodeid# and #t.nodename=:nodename#</label><input type="button" class="btn btn-default" onclick="VerificationSQL();" value="验证SQL是否正确" /></p>
+            </td>
+        </tr>
+        <tr>
+            <td>查询条数：</td>
+            <td><input type="text" id="SelectNumber" data-bind="value:PAGE_ROW"/></td>
+        </tr>
+        <tr>
+            <td>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</td>
+            <td><textarea class="sql_Remarks" id="RemarksContent" data-bind="value:REMARKS"></textarea></td>
+        </tr>
+        <tr>
+            <td class="sql_submit_close" colspan="2"><input type="button" class="btn btn-default" onclick="AddorUpdateSQL();" value="保存" /><input type="button" class="btn btn-default" onclick="$(function () { window.location.href = '/Home/Index'; })" value="关闭" /></td>
+        </tr>
+    </table>
+    <input type="hidden" data-bind="value:VIEW_TEMPLATE" id="ViewTemplate"/>
+</form>
+@section scripts{
+<script src="http://apps.bdimg.com/libs/knockout.js/3.1.0/knockout.js"></script>
+<script type="text/javascript">
+    var _url_addSQL = "@Url.Content("/UseSQL/AddSql/")";
+    var _url_updateSQL = "@Url.Content("/UseSQL/UpdateSql/")";
+    var _url_VerificationSQL = "@Url.Content("/UseSQL/VerificationSQL/")";
+    var _url_GetSQLInfo = "@Url.Content("/UseSQL/GetSQLInfo/")";
+    var _isUpdate=false;
+
+    $(function () {
+        if(@ViewBag.SQLId>0){
+            initView();
+            _isUpdate=true;
+        }else{
+            var classifylist=@Html.Raw(Winner.Framework.Utils.JsonProvider.ToJson(Model)) ;
+            ko.applyBindings(classifylist, document.getElementById("_User_SQL"));
+        }
+    });
+    function initView() {
+        ajax.post(_url_GetSQLInfo, { SQLId: @ViewBag.SQLId },
+                function (result) {
+                    ko.applyBindings(result.Content, document.getElementById("_User_SQL"));
+                    var str = $("#ViewTemplate").val();
+                    $("#FormType").find("label").each(function () {
+                        for(var i =0;i<str.split(',').length;i++){
+                            if($(this).text()==str.split(',')[i]){
+                                $(this).find("input").attr("checked",'true');
+                            }
+                        }
+                    });
+
+                });
+    }
+
+    function AddorUpdateSQL() {
+        var model = {};
+        var isok = true;
+        var msg = "";
+        model.VIEW_NAME = $("#Title").val().trim();
+        model.CLASSIFY_ID = $("#DataType").val().trim();
+        var formtype = "";
+        $("#FormType").find("label").each(function () {
+            if ($(this).find("input").is(':checked')) {
+                formtype += $(this).text() + ",";
+            }
+        });
+        if (formtype != "") {
+            formtype = formtype.substring(0, formtype.length - 1);
+        }
+        model.VIEW_TEMPLATE = formtype;
+        model.CACHE_STATUS = $("#StateType").find("label input:radio[name='cache']:checked").val();
+        model.COMMAND_TEXT = $("#SQLContent").val().trim();
+        model.PAGE_ROW = $("#SelectNumber").val().trim();
+        model.REMARKS = $("#RemarksContent").val().trim();
+        if (model.VIEW_NAME.length == 0) {
+            isok = false;
+            msg = "标题不能为空";
+        } else if (model.CLASSIFY_ID == 0) {
+            isok = false;
+            msg = "请选择数据类型";
+        } else if (model.VIEW_TEMPLATE.length == 0) {
+            isok = false;
+            msg = "请选择报表类型";
+        } else if (model.CACHE_STATUS.length == 0) {
+            isok = false;
+            msg = "请选择缓存状态";
+        } else if (model.COMMAND_TEXT.length == 0) {
+            isok = false;
+            msg = "请输入SQL语句";
+        } else if (model.PAGE_ROW.length == 0) {
+            isok = false;
+            msg = "请输入查询条数";
+        }else {
+            isok = true;
+        }
+        if (!isok) {
+            alert(msg);
+        } else {
+            if(_isUpdate){
+                model.VIEW_ID=@ViewBag.SQLId;
+                ajax.post(_url_updateSQL, model,
+                    function (result) {
+                        if (result.Success) {
+                            alert("修改成功");
+                            return;
+                        }
+                        alert(result.Message);
+                    });
+            }else{
+                ajax.post(_url_addSQL, model,
+                    function (result) {
+                        if (result.Success) {
+                            alert("添加成功");
+                            return;
+                        }
+                        alert(result.Message);
+                    });
+            }
+        }
+    };
+
+    function VerificationSQL() {
+        var title = $("#Title").val().trim();
+        var sql = $("#SQLContent").val().trim();
+        if (sql.length == 0) {
+            alert("请输入SQL语句");
+        } else {
+            ajax.post(_url_VerificationSQL, { Title: title, SQL: sql,isUpdate:_isUpdate },
+                function (result) {
+                    if(!result.Success){
+                        alert(result.Message);
+                    }else{
+                        alert("没有问题");
+                    }
+                });
+        }
+    };
+</script>
+
+
+}

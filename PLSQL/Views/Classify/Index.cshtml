@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewBag.Title = "类别管理";
+}
+<ul id="Binding_Manager">
+    <li class="binding_input"><span>类别名称:</span><input type="text" class="usercode_text" /><input type="button" value="添加类别" onclick="UpdateClassify_();" class="btn btn-default" /></li>
+    <li>
+        <table class="table  table-bordered table-hover" id="ClassifyList_">
+            <thead>
+                <tr><th>类别名称</th><th>操作</th></tr>
+            </thead>
+            <tbody data-bind="foreach:Data" id="_BinDing">
+                <tr class="list-repeat-info">
+                    <td>
+                        <lable data-bind="text:CLASSIFY_NAME"></lable>
+                        <input style="display:none;" type="text" name="id" rowid="1" role="textbox" class="editable inline-edit-cell ui-widget-content ui-corner-all newClassifyName" data-bind="value:CLASSIFY_NAME" />
+                        <input type="hidden" class="classifyid_" data-bind="value:CLASSIFY_ID" />
+                        <input type="hidden" class="oldclassifyname_" data-bind="value:CLASSIFY_NAME" />
+                    </td>
+                    <td>
+                        <div class="hidden-sm hidden-xs btn-group">
+                            <button class="btn btn-xs btn-info UpdateClick" onclick="Event(this);"><i class="ace-icon fa fa-pencil bigger-120"></i></button>
+                            <button class="btn btn-xs btn-danger bootbox-confirm" onclick="Delete(this);"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="am-alert am-alert-warning view-tip" data-am-alert style="display:none"></div>
+        <ul class="pagination User_view"></ul>
+    </li>
+</ul>
+@section scripts{
+<script src="http://apps.bdimg.com/libs/knockout.js/3.1.0/knockout.js"></script>
+<script src="/Resources/scripts/winner.amazeui.changePage.js"></script>
+<script src="/Resources/components/bootbox.js/bootbox.js"></script>
+<script src="/Resources/components/jqueryui-touch-punch/jquery.ui.touch-punch.js"></script>
+<script type="text/javascript">
+    var _url_Index_ClassifyIndex = "@Url.Content("/Classify/Index/")";
+    var _url_AddClassify = "@Url.Content("/Classify/AddClassify/")";
+    var _url_UpdateClassify = "@Url.Content("/Classify/UpdateClassify/")";
+    var _url_Delete_Classify = "@Url.Content("/Classify/DeleteClassify/")";
+    $(function () {
+        initView();
+    });
+    function UpdateClassify_() {
+        if ($(".usercode_text").val().trim().length == 0) {
+            alert("请输入类别名称");
+            $(".usercode_text").focus();
+        } else {
+            ajax.post(_url_AddClassify, { ClassifyName: $(".usercode_text").val().trim() },
+                    function (result) {
+                        if (result.Success) {
+                            alert("添加成功");
+                            $('.User_view').jqPaginator('reload');
+                            return;
+                        }
+                        alert(result.Message);
+                    });
+        }
+    };
+
+    function initView() {
+        //ajax.post(_url_Index_ClassifyIndex, { Isok:true },
+        //            function (result) {
+        //                if (result.Success) {
+        //                    ko.applyBindings(result.Content, document.getElementById("ClassifyList_"));
+        //                    return;
+        //                }
+        //                alert(result.Message);
+        //            });
+        $(".User_view").jqPaginator({
+            url: _url_Index_ClassifyIndex,
+            eleid: "_BinDing",
+            tip: ".view-tip",
+            totalCounts: 1,
+            pageSize: 10,
+            visiblePages: 10,
+            currentPage: 1,
+            getData: function () {
+            }
+        });
+    };
+
+
+    function Event(obj) {
+        if ($(obj).hasClass("btn-info")) {
+            $(obj).parents("tr").find("td lable").hide();
+            $(obj).parents("tr").find("td .newClassifyName").show();
+            $(obj).parents("tr").find("td .newClassifyName").focus();
+            $(obj).parents("tr").find("td .newClassifyName").select();
+            $(obj).removeClass("btn-info");
+            $(obj).addClass("UpdateBut");
+            } else {
+            $(obj).parents("tr").find("td lable").show();
+            $(obj).parents("tr").find("td .newClassifyName").hide();
+            $(obj).removeClass("UpdateBut");
+            $(obj).addClass("btn-info");
+            if ($(obj).parents("tr").find("td .newClassifyName").val().trim().length != 0 && $(obj).parents("tr").find("td .newClassifyName").val().trim() != $(obj).parents("tr").find("td .oldclassifyname_").val().trim()) {
+                ajax.post(_url_UpdateClassify, { ClassifyId: $(obj).parents("tr").find("td .classifyid_").val().trim(), ClassifyName: $(obj).parents("tr").find("td .newClassifyName").val().trim() },
+                        function (result) {
+                            if (result.Success) {
+                                alert("修改成功");
+                                $(obj).parents("tr").find("td lable").text($(obj).parents("tr").find("td .newClassifyName").val().trim());
+                                $(obj).parents("tr").find("td .oldclassifyname_").val($(obj).parents("tr").find("td .newClassifyName").val().trim());
+                                return;
+                            }
+                            alert(result.Message);
+                        });
+                }
+            }
+    };
+
+    function Delete(obj) {
+        bootbox.confirm("确定删除?", function (result) {
+            if (result) {
+                ajax.post(_url_Delete_Classify, { ClassifyId: $(obj).parents("tr").find("td .classifyid_").val().trim() },
+                    function (result) {
+                        if (result.Success) {
+                            alert("删除成功");
+                            $('.User_view').jqPaginator('reload');
+                            return;
+                        }
+                        alert(result.Message);
+                    });
+            }
+        });
+
+    }
+</script>
+}

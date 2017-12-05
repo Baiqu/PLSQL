@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "执行结果";
+}
+<style type="text/css">
+    th{cursor:pointer;}
+    th i{background-image:url("/Resources/images/Order.png");background-repeat:no-repeat;}
+    .loadText{float: right;line-height: 22px;}
+</style>
+<ul id="Execute_Result">
+    <li><form id="form_id" method="post" target="_blank"><label style="display:block; float:left;margin-right: 2%;line-height: 3.3rem;">您查看的是 <b class="dataType"> @(ViewBag.Cache == 0 ? "即时数据" : "缓存数据") </b>,来自【<a href="Javascript:void(0);" id="sqlSource">@ViewBag.ViewName</a>】<a href="javascript:void(0);" id="ImmediateData" style="@(ViewBag.Cache==1?"":"display:none;")">点此查看即时数据</a></label><input type="submit" class="btn btn-default" name="ExcelExport" value="下载EXCEL" /><input type="button" class="btn btn-default" onclick="window.location.href='/UseSQL/Index?SQLId='+@ViewBag.ViewId" value="修改" /></form></li>
+    <li><form id="_Head_Search"> @Html.Raw(ViewBag.HeadSearch)</form></li>
+    <li class="execute_result_remark">备注信息：<label>@ViewBag.Remarks</label></li>
+    <li>
+        <ul class="pagination View_Page"></ul>
+        <div id="Table_">@Html.Raw(ViewBag.TableHtml)</div>
+        <div class="am-alert am-alert-warning view-tip" data-am-alert style="display:none"></div>
+        <ul class="pagination View_Page"></ul>
+    </li>
+</ul>
+<input type="hidden" value="" orderby="" id="OrderInfo"/>
+<input type="hidden" value="0" id="IsCaChe"/>
+@section scripts{
+<script src="http://apps.bdimg.com/libs/knockout.js/3.1.0/knockout.js"></script>
+<script src="/Resources/scripts/winner.amazeui.changePage.js"></script>
+<script type="text/javascript">
+    var _url_Index_ViewsUrl = "@Url.Content("/ExecuteResult/TableHTML/")";
+    $(function(){
+        initView();
+        $(".table thead").find("th").click(function(){
+            if($(this).hasClass("isOrder")){
+                $(".table thead").find("th").removeClass("isOrder");
+                $(".table thead").find("th").removeClass("isOrder2");
+                $(this).addClass("isOrder2");
+
+                $(".table thead").find("th").attr("orderby","");
+                $(this).attr("orderby","DESC");
+                $("#OrderInfo").val($(this).text());
+                $("#OrderInfo").attr("orderby",$(this).attr("orderby"));
+                $('.View_Page').jqPaginator('reload');
+            }else {
+                $(".table thead").find("th").removeClass("isOrder");
+                $(".table thead").find("th").removeClass("isOrder2");
+                $(this).addClass("isOrder");
+                
+                $(".table thead").find("th").attr("orderby","");
+                $(this).attr("orderby","ASC");
+                $("#OrderInfo").val($(this).text());
+                $("#OrderInfo").attr("orderby",$(this).attr("orderby"));
+                $('.View_Page').jqPaginator('reload');
+            }
+        });
+        $("#but_query").click(function(){
+            $('.View_Page').jqPaginator('reload');
+        });
+        $("#ImmediateData").click(function(){
+            $("#IsCaChe").val("1");
+            $(this).hide();
+            $(".dataType").text("即时数据")
+            $('.View_Page').jqPaginator('reload');
+        });
+        $("#sqlSource").click(function(){
+            $('.View_Page').jqPaginator('reload');
+        });
+    });
+
+    function initView() {
+        $(".View_Page").jqPaginator({
+            url: _url_Index_ViewsUrl,
+            eleid: "Table_",
+            tip: ".view-tip",
+            totalCounts: 1,
+            pageSize: @ViewBag.PageSize,
+            visiblePages: 10,
+            currentPage: 1,
+            getData: function () {
+                var date = {
+                    order:$("#OrderInfo").val(),
+                    orderby : $("#OrderInfo").attr("orderby"),
+                    iscache: $("#IsCaChe").val()
+                };
+                var formArray = $('#_Head_Search').serializeArray();
+                $.each(formArray, function () {
+                    if (date[this.name] != null) {
+                        date[this.name] = date[this.name] + "," + this.value;
+                    } else {
+                        date[this.name] = this.value;
+                    }
+                });
+                return date;
+            }
+        });
+    }
+    function html_encode(str)
+    {
+        var s = "";
+        if (str.length == 0) return "";
+        s = str.replace("&gt;", ">");
+        s = s.replace("&lt;","<");
+        s = s.replace("&#39;", "'");
+        return s;
+    }
+</script>
+}
